@@ -16,9 +16,35 @@ need() {
   fi
 }
 
-need python3
 need npm
 need bun
+
+find_python() {
+  local cmd ver
+  for cmd in python3.13 python3.12; do
+    if command -v "$cmd" >/dev/null 2>&1; then
+      if "$cmd" -c 'import sys; assert sys.version_info >= (3, 12)' 2>/dev/null; then
+        echo "$cmd"
+        return 0
+      fi
+    fi
+  done
+  if command -v python3 >/dev/null 2>&1; then
+    if python3 -c 'import sys; assert sys.version_info >= (3, 12)' 2>/dev/null; then
+      echo python3
+      return 0
+    fi
+    ver="$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:3])))')"
+    echo "Found python3 ${ver} but pocket-agent requires Python >= 3.12."
+  else
+    echo "python3 not found."
+  fi
+  echo "Install: brew install python@3.12"
+  return 1
+}
+
+PYTHON="$(find_python)" || exit 1
+echo "Using ${PYTHON} ($(${PYTHON} --version))"
 
 if [[ "${SETUP_DESKTOP:-1}" == "1" ]]; then
   if ! command -v cargo >/dev/null 2>&1; then
@@ -35,8 +61,12 @@ fi
 
 echo "→ Python agent"
 cd "${AGENT}"
+if [[ -d .venv ]] && ! .venv/bin/python -c 'import sys; assert sys.version_info >= (3, 12)' 2>/dev/null; then
+  echo "Removing .venv (Python < 3.12 — recreate with ${PYTHON})"
+  rm -rf .venv
+fi
 if [[ ! -d .venv ]]; then
-  python3 -m venv .venv
+  "${PYTHON}" -m venv .venv
 fi
 # shellcheck source=/dev/null
 source .venv/bin/activate
