@@ -20,9 +20,13 @@ need npm
 need bun
 
 find_python() {
-  local cmd ver
-  for cmd in python3.13 python3.12; do
-    if command -v "$cmd" >/dev/null 2>&1; then
+  local cmd ver candidates=(
+    python3.13 python3.12
+    /opt/homebrew/bin/python3.13 /opt/homebrew/bin/python3.12
+    /usr/local/bin/python3.13 /usr/local/bin/python3.12
+  )
+  for cmd in "${candidates[@]}"; do
+    if [[ -x "$cmd" ]] || command -v "$cmd" >/dev/null 2>&1; then
       if "$cmd" -c 'import sys; assert sys.version_info >= (3, 12)' 2>/dev/null; then
         echo "$cmd"
         return 0
@@ -40,6 +44,7 @@ find_python() {
     echo "python3 not found."
   fi
   echo "Install: brew install python@3.12"
+  echo "Then re-run this script (or: /opt/homebrew/bin/python3.12 -m venv pocket-agent/.venv)"
   return 1
 }
 
