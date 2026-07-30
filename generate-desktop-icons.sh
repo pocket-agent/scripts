@@ -4,11 +4,17 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DESKTOP="${ROOT}/pocket-agent-desktop-app"
-LOGO="${ROOT}/pocket-agent-web-app/src/assets/react-supabase-auth-template-logo.png"
+LOGO="${ROOT}/pocket-agent/.github/pocket-agent-image.png"
+if [[ ! -f "$LOGO" ]]; then
+  LOGO="${ROOT}/pocket-agent-image.png"
+fi
+if [[ ! -f "$LOGO" ]]; then
+  LOGO="${ROOT}/pocket-agent-web-app/src/assets/pocket-agent-logo.png"
+fi
 ICON_DIR="${DESKTOP}/src-tauri/icons"
 
 if [[ ! -f "$LOGO" ]]; then
-  echo "Logo not found: $LOGO (install pocket-agent-web-app first)"
+  echo "Logo not found: pocket-agent/.github/pocket-agent-image.png (or workspace fallbacks)"
   exit 1
 fi
 

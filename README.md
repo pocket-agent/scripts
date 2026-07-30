@@ -12,7 +12,8 @@ Local setup and dev helpers for the [Pocket Agent](https://github.com/pocket-age
 | `dev-desktop.sh` | Print (or hint) 3-terminal Tauri dev stack |
 | `dev-stack.sh` | Print browser-only local stack |
 | `init-workspace.sh` | Wrapper for `pocket-agent init` |
-| `generate-desktop-icons.sh` | Tauri icons from web app logo |
+| `generate-desktop-icons.sh` | Tauri icons from `pocket-agent/.github/pocket-agent-image.png` |
+| `sync-pocket-agent-branding.sh` | Copy logo + README screenshot into each `pocket-agent*` repo `.github/` |
 
 ## Prerequisites
 
