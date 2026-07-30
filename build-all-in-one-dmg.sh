@@ -67,6 +67,7 @@ fi
 echo "→ Tauri build"
 (
   cd "${DESKTOP}"
+  export CARGO_TARGET_DIR="${DESKTOP}/src-tauri/target"
   npm install
   npm run build
 )
