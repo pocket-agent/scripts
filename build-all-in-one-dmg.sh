@@ -37,6 +37,7 @@ echo "→ Web app (desktop profile — API on Pocket Node :8787)"
   export VITE_API_BASE_URL=http://127.0.0.1:8787
   export VITE_AUTH_MODE=none
   export VITE_CONNECTION_PROFILE=all-local
+  export VITE_DESKTOP_BUNDLE=true
   if [[ "$RUN_JS" == "bun" ]]; then
     bun install
     bun run build

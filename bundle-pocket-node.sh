@@ -93,10 +93,14 @@ cat > "${OUT}/run-serve.sh" <<'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
 BUNDLE_ROOT="$(cd "$(dirname "$0")" && pwd)"
+LOG_DIR="${HOME}/.pocket-agent/logs"
+mkdir -p "${LOG_DIR}"
+LOG="${LOG_DIR}/bundle-serve.log"
 export AUTH_MODE=none
 export POCKET_AGENT_BUNDLE=1
+echo "=== pocket-agent bundle serve $(date) ===" >>"${LOG}"
 cd "${BUNDLE_ROOT}/app"
-exec "${BUNDLE_ROOT}/venv/bin/pocket-agent" serve
+exec "${BUNDLE_ROOT}/venv/bin/pocket-agent" serve >>"${LOG}" 2>&1
 EOF
 chmod +x "${OUT}/run-serve.sh"
 
