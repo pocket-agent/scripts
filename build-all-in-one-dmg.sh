@@ -72,11 +72,17 @@ echo "→ Tauri build"
 )
 
 DMG_DIR="${DESKTOP}/src-tauri/target/release/bundle/dmg"
+RELEASE_DIR="${DESKTOP}/release"
 echo ""
 echo "═══════════════════════════════════════════════"
 if [[ -d "${DMG_DIR}" ]]; then
+  mkdir -p "${RELEASE_DIR}"
+  cp "${DMG_DIR}"/*.dmg "${RELEASE_DIR}/" 2>/dev/null || true
   echo " Done. DMG artifacts:"
-  ls -la "${DMG_DIR}"/*.dmg 2>/dev/null || ls -la "${DMG_DIR}"
+  ls -lh "${RELEASE_DIR}"/*.dmg 2>/dev/null || ls -la "${DMG_DIR}"
+elif [[ -d "${RELEASE_DIR}" ]] && ls "${RELEASE_DIR}"/*.dmg 1>/dev/null 2>&1; then
+  echo " Done. DMG copied to:"
+  ls -lh "${RELEASE_DIR}"/*.dmg
 else
   echo " Build finished — check ${DESKTOP}/src-tauri/target/release/bundle/"
 fi

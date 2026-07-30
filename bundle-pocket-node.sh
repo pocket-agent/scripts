@@ -42,8 +42,10 @@ rsync -a \
 mkdir -p "${OUT}/app/data/cache" "${OUT}/app/data/logs" "${OUT}/app/data/queue"
 touch "${OUT}/app/data/cache/.gitkeep"
 
-echo "→ Copy SDK (Python)"
-rsync -a "${SDK_PY}/" "${OUT}/sdk/"
+echo "→ SDK (Python) for portable editable install"
+mkdir -p "${OUT}/sdk-repo"
+cp "${ROOT}/pocket-agent-sdk/README.md" "${OUT}/sdk-repo/"
+rsync -a "${ROOT}/pocket-agent-sdk/python/" "${OUT}/sdk-repo/python/"
 
 echo "→ Web UI dist"
 if [[ ! -f "${WEB}/dist/index.html" ]]; then
@@ -56,8 +58,8 @@ echo "→ Python venv (--copies)"
 "${PYTHON}" -m venv --copies "${OUT}/venv"
 # shellcheck source=/dev/null
 source "${OUT}/venv/bin/activate"
-pip install -q -U pip wheel
-pip install -q -e "${OUT}/sdk"
+pip install -q -U pip wheel hatchling
+pip install -q -e "${OUT}/sdk-repo/python"
 pip install -q -e "${OUT}/app"
 
 cat > "${OUT}/app/.env" <<'EOF'
